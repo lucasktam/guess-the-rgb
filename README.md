@@ -1,4 +1,4 @@
-##Guess the RGB!
+# Guess the RGB!
 
 To use:
 
