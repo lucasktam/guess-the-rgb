@@ -14,6 +14,7 @@ function getRandomRGB(){
 
 let square = document.getElementById('square');
 let squareRGB = getRandomRGB();
+let black = true;
 
 square.style.backgroundColor = `rgb(${squareRGB[0]}, ${squareRGB[1]}, ${squareRGB[2]})`;
 
@@ -27,7 +28,7 @@ function clearText(elementId) {
 }
 
 document.getElementById('submitButton').addEventListener('click', () => {
-    document.getElementById('submitButton').disabled = true;
+    
     // Collect data
     const formData = {
         field1: document.getElementById('field1').value,
@@ -42,24 +43,33 @@ document.getElementById('submitButton').addEventListener('click', () => {
 
     // Process data (example: log it to console)
     console.log('Form Data:', formData);
-
+    document.getElementById('submitButton').disabled = true;
     // Add new
     trueRGB = document.createElement("p");
-    trueRGB.innerText = `Answer: ${squareRGB[0]}, ${squareRGB[1]}, ${squareRGB[2]}\n\n` +
+    trueRGB.innerHTML = `<strong>Answer:</strong> ${squareRGB[0]}, ${squareRGB[1]}, ${squareRGB[2]}<br><br>` +
 
                         `ΔR = ${Math.abs(squareRGB[0]-Number(formData.field1))}, `+
                          `ΔG = ${Math.abs(squareRGB[1]-Number(formData.field2))}, `+
-                         `ΔB = ${Math.abs(squareRGB[2]-Number(formData.field3))}\n\n` +
+                         `ΔB = ${Math.abs(squareRGB[2]-Number(formData.field3))}<br>` +
 
                          `Total difference: ${Math.abs(squareRGB[0]-Number(formData.field1)) 
                                             + Math.abs(squareRGB[1]-Number(formData.field2)) 
-                                            + Math.abs(squareRGB[2]-Number(formData.field3))}\n\n` +
+                                            + Math.abs(squareRGB[2]-Number(formData.field3))}<br><br>` +
 
-                        `You were ${(((Math.abs(squareRGB[0]-Number(formData.field1)) 
+                        `You were <strong>${(((Math.abs(squareRGB[0]-Number(formData.field1)) 
                             + Math.abs(squareRGB[1]-Number(formData.field2)) 
-                            + Math.abs(squareRGB[2]-Number(formData.field3))) * 1.0 / (255*3)) * 100).toFixed(2)}% off!`;
+                            + Math.abs(squareRGB[2]-Number(formData.field3))) * 1.0 / (255*3)) * 100).toFixed(2)}% off!</strong>`;
 
     trueRGB.id = "trueRGB";  
+    if (!black){
+        trueRGB.style.color = `rgb(35, 35, 38)`;
+        trueRGB.style.backgroundColor = `rgb(228, 228, 228)`;
+        strongElements = trueRGB.querySelectorAll('strong');
+        strongElements.forEach(strong => { 
+            strong.style.color = `rgb(35, 35, 38)`;
+            strong.style.backgroundColor = `rgb(228, 228, 228)`;
+        });
+    }
     document.body.appendChild(trueRGB);
 
     let continueButton = document.getElementById("continueButton");
@@ -69,8 +79,7 @@ document.getElementById('submitButton').addEventListener('click', () => {
 
     continueButton = document.createElement("button");
     continueButton.id = "continueButton";
-    continueButton.style.width = '100px';
-    continueButton.style.height = '20px';
+    
     continueButton.textContent = 'Continue';
     continueButton.addEventListener('click', () => {
         clearText("field1");
@@ -92,3 +101,33 @@ document.getElementById('submitButton').addEventListener('click', () => {
     document.body.appendChild(continueButton);
 
 });
+
+
+document.getElementById('bw-button').addEventListener('click', () => {
+    black = !black;
+    toggleBW(black);
+    
+});
+function toggleBW(black){
+    const inputs = document.querySelectorAll('input'); // Select all input elements
+    if (black) { 
+        document.querySelectorAll('*').forEach(element => {
+            if (element.id != "square" && element.id != "submitButton" && element.id != "continueButton" 
+                && element.id != "bw-button" && !Array.from(inputs).includes(element)){
+                element.style.color = `rgb(228, 228, 228)`;
+                element.style.backgroundColor = `rgb(35, 35, 38)`;
+            }
+        })
+
+    }
+    else{
+        document.querySelectorAll('*').forEach(element => {
+            if (element.id != "square" && element.id != "submitButton" && element.id != "continueButton" 
+                && element.id != "bw-button" && !Array.from(inputs).includes(element)){
+                element.style.color = `rgb(35, 35, 38)`;
+                element.style.backgroundColor = `rgb(228, 228, 228)`;
+            }
+        })
+    }
+    return;
+}
